@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MovieApi.Models
 {
-	[Table("movies")]
-	public class Movie
+	[Table("genre")]
+	public class Genre
 	{
 		[Key]
 		public Guid Id { get; set; }
@@ -13,12 +14,8 @@ namespace MovieApi.Models
 		[Required]
 		public string? Name { get; set; }
 
-		[Required]
-		public string? Url { get; set; }
-
-		[Required]
-		public Genre? Genre { get; set; }
+		[JsonIgnore]
+		public List<Movie> Movies { get; set; }
 	}
-	
 }
 

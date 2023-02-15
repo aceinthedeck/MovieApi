@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieApi.Dto;
 using MovieApi.Models;
 using MovieApi.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MovieApi.Controllers
 {
@@ -11,10 +12,18 @@ namespace MovieApi.Controllers
 	public class MovieController : BaseController<MovieController>
 	{
 		private readonly IMovieService _movieService;
+        private readonly IFileUploadService _fileUploadService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-		public MovieController(IMovieService movieService, ILogger<MovieController> logger) : base(logger)
+		public MovieController(IMovieService movieService,
+            ILogger<MovieController> logger,
+            IFileUploadService fileUploadService,
+            IWebHostEnvironment webHostEnvironment
+            ) : base(logger)
 		{
 			_movieService = movieService;
+            _fileUploadService = fileUploadService;
+            _webHostEnvironment = webHostEnvironment;
 		}
 
         [HttpGet("{name}")]
@@ -29,19 +38,44 @@ namespace MovieApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] NewMovieDto newCurrencyDto)
+        public async Task<IActionResult> Create([FromForm] string name, [FromForm] IFormFile image)
         {
             var newMovie = new Movie();
-            newMovie.Name = newCurrencyDto.name;
+            newMovie.Name = name;
+
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("File is empty");
+            }
+
+            // webroot path
+            string webRoot = _webHostEnvironment.WebRootPath;
+
+            var str = Environment.GetEnvironmentVariable("Test");
+            if(str == null)
+            {
+
+            }
+
+            // get extension of the uploaded file
+            string extension = Path.GetExtension(image.FileName);
+
+            // generate a file name, using GUID to avoid duplicates
+            string fileName = Path.Combine(webRoot + Guid.NewGuid().ToString() + extension);
 
             try
             {
+                // upload the file
+                string uploadedFileUrl = await _fileUploadService.UploadFile(image, fileName);
+                // assign the new file url to the db model
+                newMovie.Url = uploadedFileUrl;
+                // save the details in db
                 newMovie = await _movieService.Create(newMovie);
 
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest("Error in input or duplicate movie");
+                return BadRequest(ex.Message);
             }
 
             return Ok(newMovie);
