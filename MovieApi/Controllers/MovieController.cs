@@ -32,12 +32,12 @@ namespace MovieApi.Controllers
         [HttpGet("{name}")]
         public async Task<IActionResult> FindByName(Guid genreId, string name)
         {
-            var currency = await _movieService.FindByName(name);
-            if (currency == null)
+            var movie = await _movieService.FindByName(name);
+            if (movie == null)
             {
                 return NotFound();
             }
-            return Ok(currency);
+            return Ok(movie);
         }
 
         [HttpPost]
@@ -83,7 +83,8 @@ namespace MovieApi.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest(ex.Message);
+                _logger.Log(LogLevel.Error, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
             return Ok(newMovie);

@@ -15,7 +15,7 @@ namespace MovieApi.Models
 		public string? Name { get; set; }
 
 		[JsonIgnore]
-		public List<Movie> Movies { get; set; }
+		public IEnumerable<Movie> Movies { get; set; }
 	}
 }
 

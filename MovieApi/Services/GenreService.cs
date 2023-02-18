@@ -8,6 +8,7 @@ namespace MovieApi.Services
 	public class GenreService : IGenreService
 	{
 		private readonly IGenreRepository _genreRepository;
+        private readonly IMovieService _movieService;
 
 		public GenreService(IGenreRepository genreRepository)
 		{
@@ -24,6 +25,8 @@ namespace MovieApi.Services
 
         public Task Delete(Genre genre)
         {
+            // add delete file logic
+            
             return _genreRepository.Delete(genre);
         }
 

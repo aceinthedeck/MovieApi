@@ -22,6 +22,7 @@ namespace MovieApi.Services
         public Task Delete(Movie movie)
         {
             // normally we would test here if Genre "owns" the Movie id
+            // delete logic here
             return _movieRepository.Delete(movie);
         }
 
