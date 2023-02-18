@@ -8,26 +8,29 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MovieApi.Controllers
 {
-    [Route("movies")]
+    [Route("genres/{genreId}/movies")]
 	public class MovieController : BaseController<MovieController>
 	{
 		private readonly IMovieService _movieService;
+        private readonly IGenreService _genreService;
         private readonly IFileUploadService _fileUploadService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
 		public MovieController(IMovieService movieService,
+            IGenreService genreService,
             ILogger<MovieController> logger,
             IFileUploadService fileUploadService,
             IWebHostEnvironment webHostEnvironment
             ) : base(logger)
 		{
 			_movieService = movieService;
+            _genreService = genreService;
             _fileUploadService = fileUploadService;
             _webHostEnvironment = webHostEnvironment;
 		}
 
         [HttpGet("{name}")]
-        public async Task<IActionResult> FindByName(string name)
+        public async Task<IActionResult> FindByName(Guid genreId, string name)
         {
             var currency = await _movieService.FindByName(name);
             if (currency == null)
@@ -38,8 +41,18 @@ namespace MovieApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] string name, [FromForm] IFormFile image)
+        public async Task<IActionResult> Create([FromForm] string name,
+                                                 Guid genreId,
+                                                [FromForm] IFormFile image)
         {
+
+            var genre = await _genreService.FindById(genreId);
+
+            if(genre == null)
+            {
+                return NotFound("Genre not found");
+            }
+
             var newMovie = new Movie();
             newMovie.Name = name;
 
@@ -50,12 +63,6 @@ namespace MovieApi.Controllers
 
             // webroot path
             string webRoot = _webHostEnvironment.WebRootPath;
-
-            var str = Environment.GetEnvironmentVariable("Test");
-            if(str == null)
-            {
-
-            }
 
             // get extension of the uploaded file
             string extension = Path.GetExtension(image.FileName);
@@ -69,6 +76,7 @@ namespace MovieApi.Controllers
                 string uploadedFileUrl = await _fileUploadService.UploadFile(image, fileName);
                 // assign the new file url to the db model
                 newMovie.Url = uploadedFileUrl;
+                newMovie.Genre = genre;
                 // save the details in db
                 newMovie = await _movieService.Create(newMovie);
 
@@ -80,6 +88,29 @@ namespace MovieApi.Controllers
 
             return Ok(newMovie);
 
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteById(Guid genreId, Guid id)
+        {
+            var movie = await _movieService.FindById(id);
+
+            if(movie == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _movieService.Delete(movie);
+            }
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+            return NoContent();
         }
     }
 }

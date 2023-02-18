@@ -7,6 +7,8 @@ namespace MovieApi.Repository
 	{
 		Task<Movie> Add(Movie movie);
 		Task<Movie> FindByName(string name);
+		Task<Movie> FindById(Guid id);
+		Task Delete(Movie movie);
 	}
 }
 

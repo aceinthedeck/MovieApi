@@ -19,6 +19,17 @@ namespace MovieApi.Services
             return _movieRepository.Add(movie);
         }
 
+        public Task Delete(Movie movie)
+        {
+            // normally we would test here if Genre "owns" the Movie id
+            return _movieRepository.Delete(movie);
+        }
+
+        public Task<Movie> FindById(Guid id)
+        {
+            return _movieRepository.FindById(id);
+        }
+
         public Task<Movie> FindByName(string name)
         {
             return _movieRepository.FindByName(name);

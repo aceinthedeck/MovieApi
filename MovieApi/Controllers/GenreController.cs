@@ -6,7 +6,7 @@ using MovieApi.Services;
 
 namespace MovieApi.Controllers
 {
-	[Route("movies")]
+	[Route("genre")]
 	public class GenreController : BaseController<GenreController>
 	{
 		private readonly IGenreService _genreService;
@@ -21,7 +21,7 @@ namespace MovieApi.Controllers
 
 			try
 			{
-				return Ok(_genreService.Create(newGenreDto));
+				return Ok(await _genreService.Create(newGenreDto));
 			}
 			catch (Exception ex)
 			{
@@ -41,7 +41,10 @@ namespace MovieApi.Controllers
 				return NotFound();
 			}
 
-			return Ok(genre);
+			var movieList = new MovieListDto();
+			movieList.movies = genre.Movies;
+
+			return Ok(movieList);
 		}
 
 		[HttpGet]
@@ -49,6 +52,30 @@ namespace MovieApi.Controllers
 		{
 			return Ok(await _genreService.FindAll());
 		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteById(Guid id)
+		{
+			var genre = await _genreService.FindById(id);
+
+			if(genre == null)
+			{
+				return NotFound("Genre not found");
+			}
+
+			try
+			{
+				await _genreService.Delete(genre);
+			}
+			catch (Exception ex)
+			{
+                _logger.Log(LogLevel.Error, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+			return NoContent();
+		}
+
 	}
 }
 

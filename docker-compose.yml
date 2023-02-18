@@ -8,6 +8,7 @@ services:
       - "5001:80"
     depends_on:
       - db
+    restart: always
     environment:
       - CONNECTION_STRING=Server=db;Database=movies;User Id=developer;Password=secret;
       - S3_USER_ID=abc

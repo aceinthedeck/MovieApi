@@ -8,6 +8,10 @@ namespace MovieApi.Services
 		Task<Movie> FindByName(string name);
 
 		Task<Movie> Create(Movie movie);
+
+		Task<Movie> FindById(Guid id);
+
+		Task Delete(Movie movie);
 	}
 }
 

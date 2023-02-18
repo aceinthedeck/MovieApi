@@ -22,6 +22,11 @@ namespace MovieApi.Services
             return _genreRepository.Add(newGenre);
         }
 
+        public Task Delete(Genre genre)
+        {
+            return _genreRepository.Delete(genre);
+        }
+
         public Task<IEnumerable<Genre>> FindAll()
         {
             return _genreRepository.FindAll();

@@ -11,6 +11,8 @@ namespace MovieApi.Services
         Task<Genre> Create(NewGenreDto genre);
 
         Task<IEnumerable<Genre>> FindAll();
+
+        Task Delete(Genre genre);
     }
 }
 

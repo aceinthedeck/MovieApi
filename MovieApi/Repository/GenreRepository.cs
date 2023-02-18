@@ -19,14 +19,23 @@ namespace MovieApi.Repository
 
         public async Task<Genre> FindById(Guid id)
         {
-            return await _dbContext.Genres.Where(g =>
-                g.Id == id).FirstOrDefaultAsync();
+            return await _dbContext.Genres
+                            .Where(g => g.Id == id)
+                            .Include(g => g.Movies)
+                            .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Genre>> FindAll()
         {
             return await _dbContext.Genres.ToListAsync();
         }
+
+        public async Task Delete(Genre genre)
+        {
+            _dbContext.Remove(genre);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
 }
 

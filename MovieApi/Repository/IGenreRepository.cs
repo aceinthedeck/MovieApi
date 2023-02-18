@@ -8,6 +8,7 @@ namespace MovieApi.Repository
         Task<Genre> Add(Genre movie);
         Task<Genre> FindById(Guid id);
         Task<IEnumerable<Genre>> FindAll();
+        Task Delete(Genre genre);
     }
 }
 
