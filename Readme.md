@@ -6,6 +6,8 @@ Make sure that the migrations folder exist. If not run the command to create the
 
 The migrations will be run automatically on application startup
 
+Create a file ```.env``` in the root directory copy and update the values from ```.env.example``` file
+
 To start the application give command from the root directory
 
 ```docker-compose up```

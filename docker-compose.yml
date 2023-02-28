@@ -9,11 +9,7 @@ services:
     depends_on:
       - db
     restart: always
-    environment:
-      - CONNECTION_STRING=Server=db;Database=movies;User Id=developer;Password=secret;
-      - S3_USER_ID=abc
-      - S3_secret=def
-      - S3_bucket_name=bucket_images
+    env_file: .env
   db:
     image: postgres:15.2-alpine
     volumes:

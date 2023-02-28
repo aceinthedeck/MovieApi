@@ -11,7 +11,7 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IGenreService, GenreService>();
-builder.Services.AddScoped<IFileUploadService, LocalFileUploadService>();
+builder.Services.AddScoped<IFileUploadService, S3UploadService>();
 
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 if (connectionString == null)

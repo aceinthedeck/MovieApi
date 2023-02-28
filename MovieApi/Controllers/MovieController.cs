@@ -1,4 +1,5 @@
 ﻿using System;
+using Amazon.S3;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Dto;
@@ -85,6 +86,12 @@ namespace MovieApi.Controllers
             {
                 _logger.Log(LogLevel.Error, ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            catch(AmazonS3Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+
             }
 
             return Ok(newMovie);

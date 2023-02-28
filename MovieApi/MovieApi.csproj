@@ -18,6 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.103.16" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
     <None Remove="Services\" />
     <None Remove="Dto\" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
+    <None Remove="AWSSDK.S3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
