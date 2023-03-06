@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-    - name: Build, tag, and push docker image to Amazon ECR Public
+    - name: Build, tag, and push docker image to Docker hub
       env:
         REGISTRY: ${{ secrets.DOCKER_USERNAME }}
         REPOSITORY: movieapi
