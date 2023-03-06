@@ -35,7 +35,7 @@ jobs:
         REGISTRY_ALIAS: my-ecr-public-registry-alias
         REPOSITORY: my-ecr-public-repo
         IMAGE_TAG: latest
-        run: |
+      run: |
           docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
