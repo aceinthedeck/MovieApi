@@ -29,8 +29,8 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: cloud
+        ECR_REGISTRY: public.ecr.aws/t1c1i6l3/movieapi
+        ECR_REPOSITORY: movieapi
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./MovieApi/.
