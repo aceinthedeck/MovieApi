@@ -21,7 +21,8 @@ if (connectionString == null)
 
 // Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString));
+                options.UseSqlServer(connectionString));
+               // options.UseNpgsql(connectionString));
 
 // Add services to the container.
 
