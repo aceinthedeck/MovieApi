@@ -28,7 +28,7 @@ jobs:
         REPOSITORY: movieapi
         IMAGE_TAG: latest
       run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./MovieApi/.
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
 
