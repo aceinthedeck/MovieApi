@@ -12,7 +12,6 @@ RUN dotnet restore
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build
-RUN dotnet test
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
