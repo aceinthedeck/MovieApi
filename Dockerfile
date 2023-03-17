@@ -4,14 +4,18 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["MovieApi.csproj", "."]
-RUN dotnet restore "./MovieApi.csproj"
+COPY ["MovieApi.sln", "."]
+COPY ["./MovieApi/MovieApi.csproj", "./MovieApi/"]
+COPY ["./MovieApiTest/MovieApiTest.csproj", "./MovieApiTest/"]
+
+RUN dotnet restore
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "MovieApi.csproj" -c Release -o /app/build
+RUN dotnet build
+RUN dotnet test
 
 FROM build AS publish
-RUN dotnet publish "MovieApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
